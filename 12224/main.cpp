@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <windows.h>
-#include <Cmath>
+#include <cmath>
 
 using namespace std;
 
@@ -14,22 +14,26 @@ int main() {
 
     int secret, guess, tries;
     char again;
+    int score = 0;
+    int round = 0;
 
     cout << "\n";
     cout << "================\n";
     cout << "  УГАДАЙ НОТУ\n";
-    cout << "  V.0.1(demo)\n";
+    cout << "  V.0.2(cmath)\n";
     cout << "================\n\n";
+    cout << "Счёт: " << score << "\n";
 
     do {
+        round++;
         secret = rand() % 7 + 1;
         tries = 0;
 
-        cout << "Я загадал ноту (1-7)\n";
+        cout << "\nРаунд " << round << ":\n";
         cout << "1(До) 2(Ре) 3(Ми) 4(Фа) 5(Соль) 6(Ля) 7(Си)\n";
-        cout << "У тебя 5 попыток\n\n";
+        cout << "У тебя 2 попытки\n\n";
 
-        while (tries < 5) {
+        while (tries < 2) {
             cout << "> ";
             cin >> guess;
 
@@ -41,31 +45,43 @@ int main() {
             tries++;
 
             if (guess == secret) {
+                int pts = (tries == 1) ? 100 : (tries == 2) ? 50 : 25;
+                score += pts;
                 cout << "\n=== ПОБЕДА ===\n";
                 cout << "Нота " << secret << "\n";
+                cout << "+" << pts << " очков (с " << tries << "-й попытки)\n";
                 break;
             }
 
-            if (tries == 5) {
+            if (tries == 2) {
                 cout << "\nНе угадал. Это была нота №" << secret << "\n";
                 break;
             }
+
+
+
+            cout << "\n-- подсказка ---\n";
+            double accuracy = 100.0 - (fabs(guess - secret) / 6.0 * 100.0);
+            if (accuracy < 0) accuracy = 0;
+
+            cout << "Твоя догадка верна на " << accuracy << "%\n";
+
 
             if (guess < secret) {
                 cout << "Выше\n";
             } else {
                 cout << "Ниже\n";
             }
-            cout << "Осталось: " << 5 - tries << "\n\n";
+            cout << "Осталось: " << 2 - tries << "\n\n";
         }
 
-        cout << "\nЕщё? (y/n): ";
+        cout << "\nСчёт: " << score << "\n";
+        cout << "Ещё? (y/n): ";
         cin >> again;
         cout << "\n";
 
     } while (again == 'y' || again == 'Y');
 
-    cout << "Пока\n\n";
-
+    cout << "Игра окончена! Финальный счёт: " << score << "\n\n";
     return 0;
 }
