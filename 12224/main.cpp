@@ -1,10 +1,18 @@
-#include <iostream>
+#include <bits/stdc++.h>
 #include <cstdlib>
 #include <ctime>
 #include <windows.h>
-#include <cmath>
-
 using namespace std;
+
+
+
+//       «‚ÛÍ
+vector<float>notes = {261.63,293.66,329.63,349.23,392.00,440.00,493.88};
+void playNote(double frequency, int durationMs) {
+    Beep(static_cast<DWORD>(frequency), durationMs);
+}
+
+
 
 int main() {
     SetConsoleCP(1251);
@@ -20,7 +28,7 @@ int main() {
     cout << "\n";
     cout << "================\n";
     cout << "  ”√¿ƒ¿… ÕŒ“”\n";
-    cout << "  V.0.2(cmath)\n";
+    cout << "  V.0.3(Á‚ÛÍ)\n";
     cout << "================\n\n";
     cout << "—˜∏Ú: " << score << "\n";
 
@@ -28,7 +36,7 @@ int main() {
         round++;
         secret = rand() % 7 + 1;
         tries = 0;
-
+        playNote(notes[secret-1],750    );
         cout << "\n–‡ÛÌ‰ " << round << ":\n";
         cout << "1(ƒÓ) 2(–Â) 3(ÃË) 4(‘‡) 5(—ÓÎ¸) 6(Àˇ) 7(—Ë)\n";
         cout << "” ÚÂ·ˇ 2 ÔÓÔ˚ÚÍË\n\n";
@@ -45,7 +53,7 @@ int main() {
             tries++;
 
             if (guess == secret) {
-                int pts = (tries == 1) ? 100 : (tries == 2) ? 50 : 25;
+                int pts = (tries == 1) ? 100:50;
                 score += pts;
                 cout << "\n=== œŒ¡≈ƒ¿ ===\n";
                 cout << "ÕÓÚ‡ " << secret << "\n";
