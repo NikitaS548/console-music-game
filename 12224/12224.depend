@@ -5,10 +5,9 @@
 	<ctime>
 	<windows.h>
 
-1773906858 source:c:\users\user\desktop\console-music-game\12224\main.cpp
-	<iostream>
+1774508152 source:c:\users\user\desktop\console-music-game\12224\main.cpp
+	<bits/stdc++.h>
 	<cstdlib>
 	<ctime>
 	<windows.h>
-	<cmath>
 

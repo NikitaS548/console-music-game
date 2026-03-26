@@ -15,6 +15,7 @@ void playNote(double frequency, int durationMs) {
 
 
 int main() {
+    //        создание переменных и подклюючение русского языка
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
@@ -24,28 +25,41 @@ int main() {
     char again;
     int score = 0;
     int round = 0;
+    int difficulty;
 
+    //         приветствие игрока
     cout << "\n";
     cout << "================\n";
     cout << "  УГАДАЙ НОТУ\n";
-    cout << "  V.0.3(звук)\n";
+    cout << "  V.1.0(сложности)\n";
     cout << "================\n\n";
+    cout << "Выбери сложность:\n";
+    cout << "1 - Легко (5 попыток, подсказки)\n";
+    cout << "2 - Средне (2 попытки)\n";
+    cout << "3 - Сложно (1 попытка)\n";
+    cin >> difficulty;
+    int maxTries = (difficulty == 1) ? 5 : (difficulty == 2) ? 2 : 1;
+    int ptsMult = (difficulty == 1) ? 1 : (difficulty == 2) ? 2 : 3;
     cout << "Счёт: " << score << "\n";
 
+
+    //          основной цикл
     do {
+        //      загадывание ноты
         round++;
         secret = rand() % 7 + 1;
         tries = 0;
-        playNote(notes[secret-1],750    );
+        playNote(notes[secret-1],750);
         cout << "\nРаунд " << round << ":\n";
         cout << "1(До) 2(Ре) 3(Ми) 4(Фа) 5(Соль) 6(Ля) 7(Си)\n";
-        cout << "У тебя 2 попытки\n\n";
+        cout << "У тебя "<<maxTries<<" попыток(-тки)\n\n";
 
-        while (tries < 2) {
+        while (tries < maxTries) {
+            //     попытка отагадь ноту
             cout << "> ";
             cin >> guess;
 
-            if (guess < 1 || guess > 7) {
+            if (guess < 1 or guess > 7) {
                 cout << "Нет такой ноты\n";
                 continue;
             }
@@ -53,15 +67,15 @@ int main() {
             tries++;
 
             if (guess == secret) {
-                int pts = (tries == 1) ? 100:50;
-                score += pts;
+                int pts = (tries == 1) ? 100:(tries==2) ? 50:(tries==3) ? 25:10;
+                score += pts*ptsMult;
                 cout << "\n=== ПОБЕДА ===\n";
                 cout << "Нота " << secret << "\n";
-                cout << "+" << pts << " очков (с " << tries << "-й попытки)\n";
+                cout << "+" << pts<<" * mult("<<ptsMult<<") очков (с " << tries << "-й попытки)\n";
                 break;
             }
 
-            if (tries == 2) {
+            if (tries == maxTries) {
                 cout << "\nНе угадал. Это была нота №" << secret << "\n";
                 break;
             }
@@ -80,7 +94,7 @@ int main() {
             } else {
                 cout << "Ниже\n";
             }
-            cout << "Осталось: " << 2 - tries << "\n\n";
+            cout << "Осталось: " << maxTries - tries << "\n\n";
         }
 
         cout << "\nСчёт: " << score << "\n";
@@ -88,7 +102,7 @@ int main() {
         cin >> again;
         cout << "\n";
 
-    } while (again == 'y' || again == 'Y');
+    } while (again == 'y' or again == 'Y');
 
     cout << "Игра окончена! Финальный счёт: " << score << "\n\n";
     return 0;
