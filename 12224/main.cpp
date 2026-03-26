@@ -4,20 +4,19 @@
 #include <windows.h>
 using namespace std;
 
-
-
-//       Звук
+//       Р—РІСѓРє
 vector<float>notes = {261.63,293.66,329.63,349.23,392.00,440.00,493.88};
 void playNote(double frequency, int durationMs) {
     Beep(static_cast<DWORD>(frequency), durationMs);
 }
 
-
-
 int main() {
-    //        создание переменных и подклюючение русского языка
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
+    //        СЃРѕР·РґР°РЅРёРµ РїРµСЂРµРјРµРЅРЅС‹С… Рё РїРѕРґРєР»СЋСЋС‡РµРЅРёРµ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+
+    // РЈСЃС‚Р°РЅРѕРІРєР° С€СЂРёС„С‚Р° РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРёСЂРёР»Р»РёС†С‹
+    system("chcp 65001 > nul");
 
     srand(time(0));
 
@@ -26,84 +25,102 @@ int main() {
     int score = 0;
     int round = 0;
     int difficulty;
+    int correctAnswers = 0;
+    int totalRounds = 0;
+    int perfectRounds = 0;
+    float totalAttempts = 0.0;
 
-    //         приветствие игрока
+    //         РїСЂРёРІРµС‚СЃС‚РІРёРµ РёРіСЂРѕРєР°
     cout << "\n";
     cout << "================\n";
-    cout << "  УГАДАЙ НОТУ\n";
-    cout << "  V.1.0(сложности)\n";
+    cout << "  РЈР“РђР”РђР™ РќРћРўРЈ\n";
+    cout << "  V.1.1(СЃС‚Р°С‚РёСЃС‚РёРєР°)\n";
     cout << "================\n\n";
-    cout << "Выбери сложность:\n";
-    cout << "1 - Легко (5 попыток, подсказки)\n";
-    cout << "2 - Средне (2 попытки)\n";
-    cout << "3 - Сложно (1 попытка)\n";
+    cout << "Р’С‹Р±РµСЂРё СЃР»РѕР¶РЅРѕСЃС‚СЊ:\n";
+    cout << "1 - Р›РµРіРєРѕ (5 РїРѕРїС‹С‚РѕРє, РїРѕРґСЃРєР°Р·РєРё)\n";
+    cout << "2 - РЎСЂРµРґРЅРµ (2 РїРѕРїС‹С‚РєРё)\n";
+    cout << "3 - РЎР»РѕР¶РЅРѕ (1 РїРѕРїС‹С‚РєР°)\n";
     cin >> difficulty;
     int maxTries = (difficulty == 1) ? 5 : (difficulty == 2) ? 2 : 1;
     int ptsMult = (difficulty == 1) ? 1 : (difficulty == 2) ? 2 : 3;
-    cout << "Счёт: " << score << "\n";
+    cout << "РЎС‡С‘С‚: " << score << "\n";
 
-
-    //          основной цикл
+    //          РѕСЃРЅРѕРІРЅРѕР№ С†РёРєР»
     do {
-        //      загадывание ноты
+        //      Р·Р°РіР°РґС‹РІР°РЅРёРµ РЅРѕС‚С‹
         round++;
         secret = rand() % 7 + 1;
         tries = 0;
         playNote(notes[secret-1],750);
-        cout << "\nРаунд " << round << ":\n";
-        cout << "1(До) 2(Ре) 3(Ми) 4(Фа) 5(Соль) 6(Ля) 7(Си)\n";
-        cout << "У тебя "<<maxTries<<" попыток(-тки)\n\n";
+        cout << "1(Р”Рѕ) 2(Р Рµ) 3(РњРё) 4(Р¤Р°) 5(РЎРѕР»СЊ) 6(Р›СЏ) 7(РЎРё)\n";
+        cout << "РЈ С‚РµР±СЏ " << maxTries << " РїРѕРїС‹С‚РѕРє(-С‚РєРё)\n\n";
 
         while (tries < maxTries) {
-            //     попытка отагадь ноту
+            //     РїРѕРїС‹С‚РєР° РѕС‚РіР°РґР°С‚СЊ РЅРѕС‚Сѓ
             cout << "> ";
             cin >> guess;
 
             if (guess < 1 or guess > 7) {
-                cout << "Нет такой ноты\n";
+                cout << "РќРµС‚ С‚Р°РєРѕР№ РЅРѕС‚С‹\n";
                 continue;
             }
 
             tries++;
 
             if (guess == secret) {
-                int pts = (tries == 1) ? 100:(tries==2) ? 50:(tries==3) ? 25:10;
-                score += pts*ptsMult;
-                cout << "\n=== ПОБЕДА ===\n";
-                cout << "Нота " << secret << "\n";
-                cout << "+" << pts<<" * mult("<<ptsMult<<") очков (с " << tries << "-й попытки)\n";
+                correctAnswers++;
+                if (tries == 1) {
+                    perfectRounds++;
+                }
+                totalAttempts += tries;
+                int pts = (tries == 1) ? 100 : (tries == 2) ? 50 : (tries == 3) ? 25 : 10;
+                score += pts * ptsMult;
+                cout << "\n=== РџРћР‘Р•Р”Рђ ===\n";
+                cout << "РќРѕС‚Р° " << secret << "\n";
+                cout << "+" << pts << " * mult(" << ptsMult << ") РѕС‡РєРѕРІ (СЃ " << tries << "-Р№ РїРѕРїС‹С‚РєРё)\n";
                 break;
             }
 
             if (tries == maxTries) {
-                cout << "\nНе угадал. Это была нота №" << secret << "\n";
+                cout << "\nРќРµ СѓРіР°РґР°Р». Р­С‚Рѕ Р±С‹Р»Р° РЅРѕС‚Р° в„–" << secret << "\n";
                 break;
             }
 
-
-
-            cout << "\n-- подсказка ---\n";
+            cout << "\n-- РїРѕРґСЃРєР°Р·РєР° ---\n";
             double accuracy = 100.0 - (fabs(guess - secret) / 6.0 * 100.0);
             if (accuracy < 0) accuracy = 0;
 
-            cout << "Твоя догадка верна на " << accuracy << "%\n";
-
+            cout << "РўРІРѕСЏ РґРѕРіР°РґРєР° РІРµСЂРЅР° РЅР° " << accuracy << "%\n";
 
             if (guess < secret) {
-                cout << "Выше\n";
+                cout << "Р’С‹С€Рµ\n";
             } else {
-                cout << "Ниже\n";
+                cout << "РќРёР¶Рµ\n";
             }
-            cout << "Осталось: " << maxTries - tries << "\n\n";
+            cout << "РћСЃС‚Р°Р»РѕСЃСЊ: " << maxTries - tries << "\n\n";
         }
 
-        cout << "\nСчёт: " << score << "\n";
-        cout << "Ещё? (y/n): ";
+        cout << "\nРЎС‡С‘С‚: " << score << "\n";
+        cout << "Р•С‰С‘? (y/n): ";
         cin >> again;
         cout << "\n";
+        system("cls");
 
+    srand(time(0));
     } while (again == 'y' or again == 'Y');
 
-    cout << "Игра окончена! Финальный счёт: " << score << "\n\n";
+    // Р¤РРќРђР›Р¬РќРђРЇ РЎРўРђРўРРЎРўРРљРђ
+    cout << "\nв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ\n";
+    cout << "           РР“Р Рђ РћРљРћРќР§Р•РќРђ           \n";
+    cout << "          РЎРўРђРўРРЎРўРРљРђ РР“Р Р«          \n";
+    cout << "в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ\n";
+    cout << "Р’СЃРµРіРѕ СЂР°СѓРЅРґРѕРІ:        " << round << "\n";
+    cout << "РџСЂР°РІРёР»СЊРЅС‹С… РѕС‚РІРµС‚РѕРІ:   " << correctAnswers << "\n";
+    cout << "РўРѕС‡РЅРѕСЃС‚СЊ:            " << (round > 0 ? (correctAnswers * 100 / round) : 0) << "%\n";
+    cout << "РРґРµР°Р»СЊРЅС‹С… СЂР°СѓРЅРґРѕРІ:    " << perfectRounds << " (СЃ 1-Р№ РїРѕРїС‹С‚РєРё)\n";
+    }
+    cout << "Р¤РёРЅР°Р»СЊРЅС‹Р№ СЃС‡С‘С‚:       " << score << "\n";
+    cout << "в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ\n\n";
+
     return 0;
 }
