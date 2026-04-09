@@ -5,9 +5,9 @@
 	<ctime>
 	<windows.h>
 
-1774512369 source:c:\users\user\desktop\console-music-game\12224\main.cpp
+1775722530 source:c:\users\user\desktop\console-music-game\12224\main.cpp
 	<bits/stdc++.h>
-	<cstdlib>
-	<ctime>
+	<cmath>
 	<windows.h>
+	<random>
 
