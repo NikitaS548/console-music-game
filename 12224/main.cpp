@@ -15,16 +15,15 @@ void playNote(double frequency, int durationMs) {
 }
 
 int main() {
-    //        создание переменных и подклюючение русского языка
-    SetConsoleCP(65001);
-    SetConsoleOutputCP(65001);
-
-    // Установка шрифта для поддержки кириллицы
-    system("chcp 65001 > nul");
-
+    //Настройка "рандома"
     random_device rd; //источник seed
     mt19937 gen(rd());// генератор чисел
     uniform_int_distribution<> dist(1, 7);// диапозон
+
+
+    //        создание переменных и подклюючение русского языка
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
 
     int secret, guess, tries;
     char again;
@@ -48,6 +47,7 @@ int main() {
     cout << "3 - Сложно (1 попытка)\n";
     while (true){
         cin >> difficulty;
+
         if (difficulty>=1 and difficulty<=3){
             break;
         }
@@ -76,6 +76,7 @@ int main() {
                 cout << "Нет такой ноты\n";
                 continue;
             }
+
 
             tries++;
 
